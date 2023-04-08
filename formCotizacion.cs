@@ -19,17 +19,17 @@ namespace VentaTortas
             public string Email { get; set; }
             public string Ciudad { get; set; }
             public string Direccion { get; set; }
-            public DateTime Fecha { get; set; }
-            public DateTime Hora { get; set; }
+            public DateTime Hora_Fecha_Envio { get; set; }
         }
 
         // Declarar la lista de clientes
         List<Cliente> listaClientes = new List<Cliente>();
 
 
-        public formCotizacion()
+        public formCotizacion(Button btnGuardar = null)
         {
             InitializeComponent();
+            this.btnGuardar = btnGuardar;
         }
 
         private void formCotizacion_Load(object sender, EventArgs e)
@@ -53,11 +53,13 @@ namespace VentaTortas
             nuevoCliente.Email = txtEmail.Text;
             nuevoCliente.Ciudad = cmbCiudad.SelectedItem.ToString();
             nuevoCliente.Direccion = txtDireccion.Text;
-            nuevoCliente.Fecha = dtFecha.Value;
-            nuevoCliente.Hora = DateTime.ParseExact(mtHora.Text, "HH:mm", CultureInfo.InvariantCulture);
-            // Obtener la hora a partir de la cadena del tiempo
-            
+            nuevoCliente.Hora_Fecha_Envio = DateTime.ParseExact(mtHoraFecha.Text, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 
+            // Obtener la hora a partir de
+            //
+            // la cadena del tiempo
+
+            listaClientes.Add(nuevoCliente);
 
             txtNombre.Clear();
             txtApellidos.Clear();
@@ -65,8 +67,7 @@ namespace VentaTortas
             txtEmail.Clear();
             cmbCiudad.SelectedIndex = -1;
             txtDireccion.Clear();
-            dtFecha.Value = DateTime.Today;
-            mtHora.Clear();
+            mtHoraFecha.Clear();
 
             // Mostrar la lista de clientes en el DataGridView llamado dgPantalla
             dgPantalla.DataSource = null;
