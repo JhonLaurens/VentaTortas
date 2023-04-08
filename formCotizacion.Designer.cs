@@ -221,6 +221,8 @@
             this.dgPantalla.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgPantalla.Location = new System.Drawing.Point(333, 40);
             this.dgPantalla.Name = "dgPantalla";
+            this.dgPantalla.ShowCellErrors = false;
+            this.dgPantalla.ShowRowErrors = false;
             this.dgPantalla.Size = new System.Drawing.Size(446, 105);
             this.dgPantalla.TabIndex = 24;
             // 
@@ -238,6 +240,8 @@
             this.dgProductos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgProductos.Location = new System.Drawing.Point(333, 160);
             this.dgProductos.Name = "dgProductos";
+            this.dgProductos.ShowCellErrors = false;
+            this.dgProductos.ShowRowErrors = false;
             this.dgProductos.Size = new System.Drawing.Size(446, 183);
             this.dgProductos.TabIndex = 25;
             // 

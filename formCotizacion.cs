@@ -96,11 +96,12 @@ namespace VentaTortas
                 {
                     // Buscar el producto con el ID ingresado
                     DataGridViewRow row = dgProductos.Rows.Cast<DataGridViewRow>().FirstOrDefault(r => r.Cells["Id"].Value.ToString() == id.ToString());
-                    if (row == null)
+                    if ( row == null )
                     {
                         // No se encontró el producto con el ID ingresado
                         MessageBox.Show($"No se encontró ningún producto con el ID {id}. Por favor ingrese un ID válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                    
                     else
                     {
                         // El producto con el ID ingresado fue encontrado
