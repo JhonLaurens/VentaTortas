@@ -141,13 +141,33 @@ namespace VentaTortas
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+            string ciudad = cmbCiudad.SelectedItem.ToString();
+            decimal costoEnvio = 0;
+
+            if (ciudad == "Bogotá" || ciudad == "Medellín" || ciudad == "Cali" || ciudad == "Barranquilla" || ciudad == "Cartagena")
+            {
+                costoEnvio = 2000;
+            }
+            else if (ciudad == "Cúcuta" || ciudad == "Bucaramanga" || ciudad == "Pereira" || ciudad == "Santa Marta" || ciudad == "Manizales")
+            {
+                costoEnvio = 3000;
+            }
+            else if (ciudad == "Villavicencio" || ciudad == "Pasto" || ciudad == "Valledupar" || ciudad == "Montería" || ciudad == "Armenia")
+            {
+                costoEnvio = 4000;
+            }
+            else
+            {
+                costoEnvio = 5000;
+            }
+
             // Calcular el precio total de los productos seleccionados
             decimal precioTotal = 0;
             foreach (Producto producto in listaProductosSeleccionados)
             {
 
 
-                precioTotal += producto.Valor;
+                precioTotal += producto.Valor + costoEnvio;
             } 
 
             Cliente nuevoCliente = new Cliente();
