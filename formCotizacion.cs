@@ -11,37 +11,29 @@ namespace VentaTortas
 
 
     {
+        double precio = 0;
+
         private void formCotizacion_Load(object sender, EventArgs e)
         {
-            // Agregar las columnas del DataGridView
-            dgProductos.Columns.Add("Id", "Id");
-            dgProductos.Columns.Add("Producto", "Producto");
-            dgProductos.Columns.Add("Sabor", "Sabor");
-            dgProductos.Columns.Add("Porciones", "No. de porciones");
-            dgProductos.Columns.Add("Valor", "Valor unitario");
-            dgProductos.Columns.Add("Cantidad", "Cantidad");
-
-
-            // Agregar las filas de la tabla
-            dgProductos.Rows.Add("1", "Torta1", "Naranja", "20", "$50,000", 1);
-            dgProductos.Rows.Add("2", "Torta2", "Naranja", "10", "$30,000", 1);
-            dgProductos.Rows.Add("3", "Torta3", "Chocolate", "10", "$35,000", 1);
-            dgProductos.Rows.Add("4", "Torta4", "Chocolate", "20", "$70,000", 1);
-            dgProductos.Rows.Add("5", "Torta5", "Red Velvet", "10", "$40,000", 1);
-            dgProductos.Rows.Add("6", "Torta6", "Red Velvet", "20", "$80,000", 1);
+            lblFecha.Text = DateTime.Today.Date.ToString("D");
+            lblPrecio.Text = (0).ToString("C");
         }
-
-        public class Producto
+        private void cboProducto_SelectedIndexChanged(object sender, EventArgs e)
         {
-            public int Id { get; set; }
-            public string Nombre { get; set; }
-            public string Sabor { get; set; }
-            public string Porciones { get; set; }
-            public decimal Valor { get; set; }
-            public int Cantidad { get; set; }
+
+            string producto = cboProducto.Text;
+
+            if (producto.Equals("Torta de Naranja de 20 porciones")) precio = 50000;
+            if (producto.Equals("Torta de Naranja de 10 porciones")) precio = 30000;
+            if (producto.Equals("Torta de Chocolate de 10 porciones")) precio = 35000;
+            if (producto.Equals("Torta de Chocolate de 20 porciones")) precio = 70000;
+            if (producto.Equals("Torta de Red Velvet de 10 porciones")) precio = 40000;
+            if (producto.Equals("Torta de Red Velvet de 20 porciones")) precio = 80000;
+
+            lblPrecio.Text = precio.ToString("C");
+
         }
-        // Declarar la lista de clientes
-        List<Producto> listaProductosSeleccionados = new List<Producto>();
+
 
         public class Cliente
         {
@@ -52,7 +44,7 @@ namespace VentaTortas
             public string Ciudad { get; set; }
             public string Direccion { get; set; }
             public DateTime Hora_Fecha_Envio { get; set; }
-            public string Precio_Total { get; set; }
+
 
         }
 
@@ -74,76 +66,14 @@ namespace VentaTortas
         }
 
 
-        private void btnAgregar_Click(object sender, EventArgs e)
-        {
-            // Mostrar un mensaje al usuario para preguntar qué producto desea agregar
-            int id = 0;
-            bool productoValido = false;
-            while (!productoValido)
-            {
-                string input = Microsoft.VisualBasic.Interaction.InputBox("Ingrese el ID del producto que desea agregar:", "Agregar producto", "");
-                if (string.IsNullOrWhiteSpace(input))
-                {
-                    // El usuario canceló la operación
-                    return;
-                }
-                if (!int.TryParse(input, out id))
-                {
-                    // El usuario ingresó un valor no numérico
-                    MessageBox.Show("Por favor ingrese un valor numérico para el ID del producto.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    // Buscar el producto con el ID ingresado
-                    DataGridViewRow row = dgProductos.Rows.Cast<DataGridViewRow>().FirstOrDefault(r => r.Cells["Id"].Value.ToString() == id.ToString());
-                    if ( row == null )
-                    {
-                        // No se encontró el producto con el ID ingresado
-                        MessageBox.Show($"No se encontró ningún producto con el ID {id}. Por favor ingrese un ID válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    
-                    else
-                    {
-                        // El producto con el ID ingresado fue encontrado
-                        productoValido = true;
-                    }
-                }
-            }
 
-            // Obtener la cantidad seleccionada por el usuario
-            DataGridViewRow productoRow = dgProductos.Rows.Cast<DataGridViewRow>().FirstOrDefault(r => r.Cells["Id"].Value.ToString() == id.ToString());
-            int cantidad = Convert.ToInt32(productoRow.Cells["Cantidad"].Value);
-
-            // Si la cantidad es mayor a cero, agregar el producto a la lista de productos seleccionados
-            if (cantidad > 0)
-            {
-                // Crear un objeto que represente el producto seleccionado
-                Producto producto = new Producto();
-                producto.Id = id;
-                producto.Nombre = productoRow.Cells["Producto"].Value.ToString();
-                producto.Sabor = productoRow.Cells["Sabor"].Value.ToString();
-                producto.Porciones = productoRow.Cells["Porciones"].Value.ToString(); ;
-                producto.Valor = Convert.ToDecimal(productoRow.Cells["Valor"].Value.ToString().Replace("$", "").Replace(",", ""));
-                producto.Cantidad = cantidad;
-
-
-                // Agregar el producto a la lista de productos seleccionados
-                listaProductosSeleccionados.Add(producto);
-
-                // Mostrar un mensaje al usuario confirmando que el producto fue agregado
-                MessageBox.Show($"El producto {producto.Nombre} ({producto.Sabor}) con ID {producto.Id} y {producto.Porciones} porción(es) ha sido agregado.", "Producto agregado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-
-            // Mostrar la lista de productos seleccionados en el DataGridView
-            dgSeleccionados.DataSource = null;
-            dgSeleccionados.DataSource = listaProductosSeleccionados;
-            
-        }
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+
+            //Costos de envio 
             string ciudad = cmbCiudad.SelectedItem.ToString();
-            decimal costoEnvio = 0;
+            double costoEnvio = 0;
 
             if (ciudad == "Bogotá" || ciudad == "Medellín" || ciudad == "Cali" || ciudad == "Barranquilla" || ciudad == "Cartagena")
             {
@@ -162,36 +92,79 @@ namespace VentaTortas
                 costoEnvio = 5000;
             }
 
-            // Calcular el precio total de los productos seleccionados
-            decimal precioTotal = 0;
-            foreach (Producto producto in listaProductosSeleccionados)
+            lblPrecioEnvio.Text=costoEnvio.ToString("C");
+
+            //Validar
+
+            if (cboProducto.SelectedIndex == -1)
+                MessageBox.Show("Debe seleccionar un producto ...!!!");
+            else if (txtCantidad.Text == "")
+                MessageBox.Show("Debe ingresar una cantidad ...!!!");
+            else if (cboTipo.SelectedIndex == -1)
+                MessageBox.Show("Debe seleccionar tipo ...!!!");
+            else
             {
+                //Capturar datos 
+                /*
+                public string Nombres 
+                public string Apellidos 
+                public string Telefono 
+                public string Email 
+                public string Ciudad 
+                public string Direccion
+                public DateTime Hora_Fecha_Envio 
+                */
+
+                string Nombre = txtNombre.Text;
+                string Apellidos = txtApellidos.Text;
+                string Telefono = txtTelefono.Text;
+                string Email = txtEmail.Text;
+                string Ciudad = cmbCiudad.Text;
+                string Direccion = txtDireccion.Text;
+                DateTime Hora_Fecha_Envio = DateTime.ParseExact(mtHoraFecha.Text, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                string producto = cboProducto.Text;
+                int cantidad = Convert.ToInt32(txtCantidad.Text);
+                string tipo = cboTipo.Text;
 
 
-                precioTotal += producto.Valor + costoEnvio;
-            } 
+                // Proceso de Cotización
+                double subTotal = cantidad * precio;
+                double descuento = 0, recargo = 0;
+                if (tipo.Equals("Efectivo"))
+                    descuento = 0.05 * subTotal;
+                else
+                    recargo =0.1 * subTotal;
+                double precioTotal = subTotal - descuento + recargo + costoEnvio;
 
-            Cliente nuevoCliente = new Cliente();
+
+                //Mostrar resultados
+                ListViewItem fila = new ListViewItem(producto);
+                fila.SubItems.Add(Nombre.ToString());
+                fila.SubItems.Add(Apellidos.ToString());
+                fila.SubItems.Add(Telefono.ToString());
+                fila.SubItems.Add(Email.ToString());
+                fila.SubItems.Add(Ciudad.ToString());
+                fila.SubItems.Add(Direccion.ToString());
+                fila.SubItems.Add(Hora_Fecha_Envio.ToString());
+                fila.SubItems.Add(cantidad.ToString());
+                fila.SubItems.Add(precio.ToString());
+                fila.SubItems.Add(tipo);
+                fila.SubItems.Add(descuento.ToString());
+                fila.SubItems.Add(recargo.ToString());
+                fila.SubItems.Add(costoEnvio.ToString());
+                fila.SubItems.Add(precioTotal.ToString());
+
+                lvVenta.Items.Add(fila);
+
+                
+
+            }
 
 
+            MessageBox.Show("Su Pedido se ha registrado con exito ..!!");
 
-            nuevoCliente.Nombres = txtNombre.Text;
-            nuevoCliente.Apellidos = txtApellidos.Text;
-            nuevoCliente.Telefono = txtTelefono.Text;
-            nuevoCliente.Email = txtEmail.Text;
-            nuevoCliente.Ciudad = cmbCiudad.SelectedItem.ToString();
-            nuevoCliente.Direccion = txtDireccion.Text;
+
            
-            nuevoCliente.Hora_Fecha_Envio = DateTime.ParseExact(mtHoraFecha.Text, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
-            nuevoCliente.Precio_Total = "$ " + precioTotal.ToString("N0");
-
-
-
-            // Mostrar el precio total en un MessageBox
-            MessageBox.Show("Precio total: $" + precioTotal.ToString("N0"));
-
-           
-            listaClientes.Add(nuevoCliente);
 
             txtNombre.Clear();
             txtApellidos.Clear();
@@ -200,15 +173,19 @@ namespace VentaTortas
             cmbCiudad.SelectedIndex = -1;
             txtDireccion.Clear();
             mtHoraFecha.Clear();
-            listaProductosSeleccionados.Clear();
+            cboProducto.SelectedIndex= -1;
+            cboTipo.SelectedIndex= -1;
+            txtCantidad.Clear();
+
+
 
             // Mostrar la lista de clientes en el DataGridView llamado dgPantalla
-            dgPantalla.DataSource = null;
-            dgPantalla.DataSource = listaClientes;
+            //dgPantalla.DataSource = null;
+            //dgPantalla.DataSource = listaClientes;
 
-           
+
         }
 
-       
+
     }
 }
